@@ -41,4 +41,4 @@ Automated checks and desktop smoke checks were completed before this public beta
 
 ## Free apps and optional creator support
 
-The apps remain free forever. Optional creator support starts at $5 and provides the same app; it does not unlock extra features or include a support or update promise.
+The apps remain free forever. [Optional creator support](https://payhip.com/b/Wn9fE) starts at $5 and provides the same app; it does not unlock extra features or include a support or update promise.
