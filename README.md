@@ -1,20 +1,33 @@
 <p align="center"><img src="assets/brand-1024.png" alt="IN3RT1A" width="120"></p>
 
-# IN3RT1A apps for Windows
+# IN3RT1A apps for Windows and Linux
 
-Free Windows apps that get your PC and TV working together.
+Free apps that get your PC and your TVs working together.
 
-## Download (one-click installers)
+## Download
 
-- [PC Cast Pro](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Pro-Setup.exe): the whole package. Your TVs' remote, casting from any link, your PC's video library, multi-screen grids and live TV.
-- [PC Cast Lite](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Lite-Setup.exe): just the casting. Paste a link and it plays on your TV.
-- [PC TV Remote](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Remote-Setup.exe): just the remote, in a small download.
+| App | What it does | Windows | Linux |
+|---|---|---|---|
+| **PC Cast Pro** | The whole package: TV remote, casting from any link, multicast to many TVs, your PC's video library, multi-screen grids and free live TV | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Pro-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Pro-Linux-x86_64.tar.gz) |
+| **PC Cast Lite** | Just the casting. Paste a link and it plays on one TV or several | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Lite-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Lite-Linux-x86_64.tar.gz) |
+| **PC TV Live** | Just free live TV: pick your country, get its channels and a guide | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Live-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Live-Linux-x86_64.tar.gz) |
+| **PC TV Remote** | Just the remote, in a small download | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Remote-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Remote-Linux-x86_64.tar.gz) |
 
-Run the Setup file and click **Install**. Everything each app needs on the PC is included, and no administrator rights are needed.
+**Windows:** run the Setup file and click **Install**. Everything each app needs on the PC is included, and no administrator rights are needed. Setup offers to add a firewall rule so your TVs can reach the app; Windows asks for permission once.
+
+**Linux (x86_64, Ubuntu 22.04 / Debian 12 or newer):** extract the tar.gz and run `./install.sh`. Add `--service` to run it in the background from boot, for a small always-on box.
 
 Portable ZIPs, SHA-256 checksums and third-party source code are on [the latest release](https://github.com/clark719664/pc-tv-apps/releases/latest).
 
 ## Screenshots
+
+**PC Cast Pro** (your video library, with profiles)
+
+<img src="assets/screenshot-pro.png" alt="PC Cast Pro library home screen" width="720">
+
+**PC TV Live** (the guide for the United States)
+
+<img src="assets/screenshot-live.png" alt="PC TV Live channel guide" width="720">
 
 **PC TV Remote**
 
@@ -24,6 +37,14 @@ Portable ZIPs, SHA-256 checksums and third-party source code are on [the latest 
 
 <img src="assets/screenshot-lite.png" alt="PC Cast Lite welcome screen" width="720">
 
+## What's new in 2026.10.21.1
+
+- **PC TV Live**, a new app: free, legal live TV with a channel guide, by country.
+- **Multicast** in PC Cast Pro and Lite: one link to many TVs, or different links to different TVs.
+- **Embedded players**: paste an embed code or embed link and it plays like any other link.
+- **Linux versions** of all four apps.
+- **Donor messages**: approved messages from supporters scroll across each app's home screen.
+
 ## Setup
 
 Keep the PC on and awake, on the same network as the TV. TVs are found automatically, and the apps walk you through any TV pairing and the one-time Roku PC Cast channel setup.
@@ -32,7 +53,7 @@ Tested by the developer on TVs on their own network. Other TV models can vary; a
 
 The apps aren't code-signed yet, so Windows SmartScreen may warn you. Click **More info**, then **Run anyway**.
 
-GitHub's automatically generated "Source code" archives are not the Windows apps.
+GitHub's automatically generated "Source code" archives are not the apps.
 
 ## Donate
 
