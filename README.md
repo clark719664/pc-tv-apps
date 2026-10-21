@@ -1,24 +1,25 @@
 # PC TV Apps for Windows
 
-Free beta downloads for **PC TV Remote / PC Cast** and **Beam**.
+Free Windows downloads for **PC TV Remote / PC Cast** and **Beam**.
 
-Both apps have been tested by the developer on TVs on their own network. Compatibility on other TV models can vary; additional TV brands and casting protocols remain beta.
+## Download (one-click installers)
 
-## Download
+- [PC TV Remote / PC Cast Setup](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Remote-Setup.exe)
+- [Beam Setup](https://github.com/clark719664/pc-tv-apps/releases/latest/download/Beam-Setup.exe)
 
-Open [the public beta release](https://github.com/clark719664/pc-tv-apps/releases/tag/v2026.10.20-beta.1), or download an app:
+Run the Setup file and click **Install**. Everything the apps need on the PC is included: the app, its Python runtime, Chromium, FFmpeg and FFprobe, ADB for Fire TV, and the PC Cast Roku channel. Nothing else needs to be downloaded or installed, and no administrator rights are needed.
 
-- [PC TV Remote / PC Cast for Windows](https://github.com/clark719664/pc-tv-apps/releases/download/v2026.10.20-beta.1/RokuRemote-public-external-tools.zip)
-- [Beam for Windows](https://github.com/clark719664/pc-tv-apps/releases/download/v2026.10.20-beta.1/Beam-1.1.0-public-external-tools.zip)
-- [SHA256SUMS.txt](https://github.com/clark719664/pc-tv-apps/releases/download/v2026.10.20-beta.1/SHA256SUMS.txt)
-
-The current beta ZIPs require FFmpeg installed separately for conversion and web/bridged casting. Complete installers with the needed PC dependencies are being prepared.
+Portable ZIPs, SHA-256 checksums and third-party source code are on [the latest release](https://github.com/clark719664/pc-tv-apps/releases/latest).
 
 ## Setup
 
-Extract the entire ZIP to a short location such as `%USERPROFILE%\PC-TV-Remote` or `%USERPROFILE%\Beam`. Run `RokuRemote.exe` or `Beam.exe` and keep the accompanying folders together. Read the included setup instructions. GitHub's automatically generated source archives are not the Windows apps.
+Keep the PC on and awake, on the same network as the TV. TVs are found automatically. The app walks you through any TV pairing and the one-time Roku PC Cast channel setup.
 
-Keep the PC on and awake, on the same local network as the TV. Roku casting requires one-time developer-mode PC Cast channel setup and the password you choose on that TV. TV pairing and permissions vary by model.
+Both apps have been tested by the developer on TVs on their own network. Other TV models can vary; additional TV brands and casting protocols remain beta.
+
+The apps aren't code-signed yet, so Windows SmartScreen may warn you. Click **More info**, then **Run anyway**.
+
+GitHub's automatically generated "Source code" archives are not the Windows apps.
 
 ## Optional creator support
 
