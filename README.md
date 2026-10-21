@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/brand-1024.png" alt="IN3RT1A" width="120"></p>
+
 # IN3RT1A apps for Windows
 
 Free Windows apps that get your PC and TV working together.
@@ -11,6 +13,16 @@ Free Windows apps that get your PC and TV working together.
 Run the Setup file and click **Install**. Everything each app needs on the PC is included, and no administrator rights are needed.
 
 Portable ZIPs, SHA-256 checksums and third-party source code are on [the latest release](https://github.com/clark719664/pc-tv-apps/releases/latest).
+
+## Screenshots
+
+**PC TV Remote**
+
+<img src="assets/screenshot-remote.png" alt="PC TV Remote: on-screen remote for a Roku TV" width="720">
+
+**PC Cast Lite** (first-run welcome)
+
+<img src="assets/screenshot-lite.png" alt="PC Cast Lite welcome screen" width="720">
 
 ## Setup
 
