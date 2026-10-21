@@ -4,10 +4,12 @@ Free beta downloads for **PC TV Remote / PC Cast** and **Beam**.
 
 ## Download
 
-Open [Releases](https://github.com/clark719664/pc-tv-apps/releases) and choose the app ZIP attached to the public beta release:
+Open [the public beta release](https://github.com/clark719664/pc-tv-apps/releases/tag/v2026.10.20-beta.1) for setup notes, or download an app ZIP:
 
-- **PC TV Remote / PC Cast:** `RokuRemote-public-external-tools.zip`
-- **Beam:** `Beam-1.1.0-public-external-tools.zip`
+- **PC TV Remote / PC Cast:** [RokuRemote-public-external-tools.zip](https://github.com/clark719664/pc-tv-apps/releases/download/v2026.10.20-beta.1/RokuRemote-public-external-tools.zip)
+- **Beam:** [Beam-1.1.0-public-external-tools.zip](https://github.com/clark719664/pc-tv-apps/releases/download/v2026.10.20-beta.1/Beam-1.1.0-public-external-tools.zip)
+
+Compare downloads against [SHA256SUMS.txt](https://github.com/clark719664/pc-tv-apps/releases/download/v2026.10.20-beta.1/SHA256SUMS.txt).
 
 Use the attached app ZIPs. GitHub's automatically generated source archives are not the Windows apps.
 
