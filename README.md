@@ -55,6 +55,18 @@ The apps aren't code-signed yet, so Windows SmartScreen may warn you. Click **Mo
 
 GitHub's automatically generated "Source code" archives are not the apps.
 
-## Donate
+## Keep it free
 
-The apps are free. A [donation](https://payhip.com/b/Wn9fE) of any amount from $1 helps keep them that way.
+All four apps are free, with no ads, no accounts and no trial. They stay that way because people who use them chip in when they can.
+
+**[Donate on Payhip](https://payhip.com/b/Wn9fE)**: pay what you want, from $1. Payhip handles the checkout, and you get a thank-you PDF.
+
+At checkout there's an optional box for a short message. Once it's approved, your first name and message scroll across the top of every app's home screen, for everyone who uses them. Messages are checked by hand before they appear, and you can leave the box empty.
+
+Other ways to help, free:
+
+- Share [payhip.com/IN3RT1A](https://payhip.com/IN3RT1A) or this page with someone who has a smart TV.
+- Star this repository so more people find it.
+- [Open an issue](https://github.com/clark719664/pc-tv-apps/issues) if something doesn't work on your TV; it's how other models get supported.
+
+Every app is also listed on the [IN3RT1A store](https://payhip.com/IN3RT1A) for free, if you'd rather download from there.
