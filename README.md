@@ -37,13 +37,14 @@ Portable ZIPs, SHA-256 checksums and third-party source code are on [the latest 
 
 <img src="assets/screenshot-lite.png" alt="PC Cast Lite welcome screen" width="720">
 
-## What's new in 2026.10.21.1
+## What's new in 2026.10.21.3
 
-- **PC TV Live**, a new app: free, legal live TV with a channel guide, by country.
-- **Multicast** in PC Cast Pro and Lite: one link to many TVs, or different links to different TVs.
-- **Embedded players**: paste an embed code or embed link and it plays like any other link.
-- **Linux versions** of all four apps.
-- **Donor messages**: approved messages from supporters scroll across each app's home screen.
+- **Cast a link plays the best version**: PC Cast Pro and Lite pick the highest resolution a page offers, up to 4K, and show what you're getting, for example `1080p60 · 6.2 Mb/s · H.264`.
+- **More pages work**: broadcasters' live pages and news sites with an embedded YouTube, Vimeo, Dailymotion or Twitch player, PeerTube video sites, and direct links to video files and HLS or DASH streams.
+- **Clear reasons** when a link can't play: it needs a sign-in, isn't available in your region, isn't live right now, or is gone.
+- **PC TV Live guide** (since 2026.10.21.2): schedules for ABC, CBS, NBC, Fox, PBS and ION Plus, and a full day of Pluto TV and Plex listings.
+
+Earlier this month: PC TV Live, multicast to many TVs, embedded players, Linux versions of all four apps, and donor messages. See [all releases](https://github.com/clark719664/pc-tv-apps/releases).
 
 ## Setup
 
