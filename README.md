@@ -10,7 +10,7 @@ Free apps that get your PC and your TVs working together.
 
 | App | What it does | Windows | Linux |
 |---|---|---|---|
-| **PC Cast Pro** | The whole package: TV remote, casting from any link, multicast to many TVs, your PC's video library, multi-screen grids and free live TV | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Pro-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Pro-Linux-x86_64.tar.gz) |
+| **PC Cast Pro** | The whole package: TV remote, casting from any link, multicast to many TVs, your PC's video library, multi-screen grids and free live TV | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/download/v2026.10.23.1/PC-Cast-Pro-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Pro-Linux-x86_64.tar.gz) |
 | **PC Cast Lite** | Just the casting. Paste a link and it plays on one TV or several | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Lite-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Lite-Linux-x86_64.tar.gz) |
 | **PC TV Live** | Just free live TV: pick your country, get its channels and a guide | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Live-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Live-Linux-x86_64.tar.gz) |
 | **PC TV Remote** | Just the remote, in a small download | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Remote-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Remote-Linux-x86_64.tar.gz) |
@@ -38,6 +38,12 @@ Portable ZIPs, SHA-256 checksums and third-party source code are on [the latest 
 **PC Cast Lite** (first-run welcome)
 
 <img src="assets/screenshot-lite.png" alt="PC Cast Lite welcome screen" width="720">
+
+## PC Cast Pro for Windows — 2026.10.23.1
+
+Retries incomplete video segments, recovers stalled conversion workers, preserves selected quality metadata, and fixes profile PIN handling after a session expires. Public downloads contain no private source catalogs or personal settings.
+
+[Windows update, portable ZIP, application source and checksums](https://github.com/clark719664/pc-tv-apps/releases/tag/v2026.10.23.1). Linux and the other editions remain on the preceding release.
 
 ## What's new in 2026.10.21.3
 
