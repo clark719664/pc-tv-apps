@@ -13,6 +13,7 @@ Generic keys: power home back up down left right ok info menu replay search
 import base64
 import json
 import ipaddress
+import re
 import socket
 import ssl
 import threading
@@ -297,6 +298,36 @@ class Roku:
         ips = set(ssdp_search("roku:ecp"))
         ips.update(sweep_port(8060))          # multicast is unreliable on this LAN
         return _threaded_probe(ips, Roku.device_info)
+
+    @staticmethod
+    def inputs(cfg):
+        """Return only safe TV-input identifiers reported by this Roku."""
+        try:
+            data, _ = Roku.request(cfg, "query/apps")
+            root = ET.fromstring(data)
+            if root.tag != "apps":
+                raise ValueError("Unexpected apps response")
+        except (AdapterError, ET.ParseError, ValueError) as exc:
+            raise ValueError("Could not read Roku TV inputs. Wake the TV and check network access for mobile apps.") from exc
+        inputs, seen = [], set()
+        for app in root.findall("app"):
+            input_id = app.get("id", "")
+            if not re.fullmatch(r"tvinput\.[A-Za-z0-9_-]{1,64}", input_id) or input_id in seen:
+                continue
+            seen.add(input_id)
+            inputs.append({"id": input_id, "name": (app.text or input_id).strip()[:100] or input_id})
+        if not inputs:
+            raise ValueError("This Roku has no configured TV inputs. Roku sticks and streaming players cannot switch the TV's inputs; on a Roku TV, set up inputs in Settings > TV inputs.")
+        return inputs
+
+    @staticmethod
+    def select_input(cfg, input_id):
+        if not isinstance(input_id, str) or not re.fullmatch(r"tvinput\.[A-Za-z0-9_-]{1,64}", input_id):
+            raise ValueError("Choose a TV input from the input picker")
+        # Requery so a stale picker cannot launch an arbitrary app or removed input.
+        if input_id not in {item["id"] for item in Roku.inputs(cfg)}:
+            raise ValueError("That TV input is no longer available. Open the input picker again.")
+        Roku.request(cfg, "launch/" + urllib.parse.quote(input_id, safe=""), method="POST")
 
     @staticmethod
     def press(cfg, key):

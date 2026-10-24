@@ -117,5 +117,73 @@ class BridgeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             bridge.adapters._validated_url('ws://192.168.1.30:3000/', expected_host='192.168.1.20')
 
+class RokuInputTests(unittest.TestCase):
+    APPS = b'<apps><app id="12">Streaming app</app><app id="tvinput.hdmi1">Game console</app><app id="tvinput.dtv">Live TV</app><app id="tvinput.cvbs">AV</app><app id="tvinput.hdmi1">Duplicate</app><app id="tvinput.bad/path">Unsafe</app></apps>'
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.request = patch.object(bridge.adapters.Roku, 'request', return_value=(self.APPS, 'text/xml'))
+        self.mock_request = self.request.start()
+        self.ident = self.call('add', brand='roku', ip='192.168.1.20')['device']['id']
+
+    def tearDown(self):
+        self.request.stop()
+        self.temp.cleanup()
+
+    def call(self, action, **payload):
+        return json.loads(bridge.call(action, json.dumps(payload), self.temp.name, '192.168.1.5'))
+
+    def test_lists_only_unique_safe_reported_tv_inputs(self):
+        result = self.call('inputs', id=self.ident)
+        self.assertTrue(result['ok'])
+        self.assertEqual(result['inputs'], [
+            {'id': 'tvinput.hdmi1', 'name': 'Game console'},
+            {'id': 'tvinput.dtv', 'name': 'Live TV'},
+            {'id': 'tvinput.cvbs', 'name': 'AV'},
+        ])
+        self.mock_request.assert_called_once_with(unittest.mock.ANY, 'query/apps')
+
+    def test_selection_rechecks_allowlist_and_posts_launch(self):
+        result = self.call('input', id=self.ident, input='tvinput.hdmi1')
+        self.assertTrue(result['ok'])
+        self.assertTrue(result['sent'])
+        self.assertEqual([c.args[1] for c in self.mock_request.call_args_list], ['query/apps', 'launch/tvinput.hdmi1'])
+        self.assertEqual(self.mock_request.call_args.kwargs, {'method': 'POST'})
+
+    def test_rejects_invalid_and_unreported_input_ids_without_post(self):
+        for value in ['12', 'tvinput.hdmi2', 'tvinput.hdmi1?x=1', 'tvinput.hdmi1/../../power', 'http://other/', '', None, 1, {}]:
+            self.mock_request.reset_mock()
+            result = self.call('input', id=self.ident, input=value)
+            self.assertFalse(result['ok'], value)
+            self.assertFalse(any(c.kwargs.get('method') == 'POST' for c in self.mock_request.call_args_list))
+
+    def test_stick_or_unconfigured_tv_reports_clear_unsupported_error(self):
+        self.mock_request.return_value = (b'<apps><app id="12">Streaming app</app></apps>', 'text/xml')
+        result = self.call('inputs', id=self.ident)
+        self.assertFalse(result['ok'])
+        self.assertIn('Roku sticks', result['error'])
+        self.assertIn('TV inputs', result['error'])
+
+    def test_malformed_tv_response_is_not_treated_as_unsupported(self):
+        self.mock_request.return_value = (b'<apps><broken', 'text/xml')
+        result = self.call('inputs', id=self.ident)
+        self.assertFalse(result['ok'])
+        self.assertIn('read', result['error'])
+
+    def test_disconnected_tv_does_not_send_selection(self):
+        self.mock_request.side_effect = bridge.adapters.AdapterError('offline')
+        result = self.call('input', id=self.ident, input='tvinput.hdmi1')
+        self.assertFalse(result['ok'])
+        self.assertEqual(self.mock_request.call_count, 1)
+
+    def test_other_brands_keep_existing_input_key(self):
+        fake = Mock(needs_pairing=False)
+        with patch.dict(bridge.adapters.ADAPTERS, {'samsung': fake}):
+            ident = self.call('add', brand='samsung', ip='192.168.1.21')['device']['id']
+            self.assertFalse(self.call('inputs', id=ident)['ok'])
+            self.assertFalse(self.call('input', id=ident, input='tvinput.hdmi1')['ok'])
+            self.assertTrue(self.call('press', id=ident, key='input')['ok'])
+            fake.press.assert_called_once_with(unittest.mock.ANY, 'input')
+
 if __name__ == '__main__':
     unittest.main()

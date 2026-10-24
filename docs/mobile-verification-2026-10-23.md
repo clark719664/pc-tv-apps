@@ -1,5 +1,19 @@
 # Standalone mobile beta verification
 
+## Remote beta 2 update
+
+Remote versionCode 2 adds a handheld remote layout with a circular D-pad, volume/channel rockers, playback controls, and a separate scrollable TVs setup panel. The existing command transport remains in place. Roku Input now lists the TV's configured inputs and launches the chosen input; duplicate friendly names include HDMI port numbers. Streaming sticks with no TV inputs receive an explicit explanation.
+
+- Remote release build and lint pass: 0 errors, 11 warnings (translation strings and intentional physical left/right D-pad placement).
+- All 18 Python tests pass, including input discovery, selection, unsafe identifiers, removed inputs, malformed responses and unsupported devices.
+- Android 16 emulator tests pass for setup, online status, Home, choosing HDMI 3 among identically named Xbox inputs, saved-TV persistence, and forgetting a TV.
+- Layout inspected at 411dp width and 320dp width with font scale 1.3. Playback and text labels were adjusted after inspection. The TVs panel can scroll to its lower actions at 640x320dp with font scale 1.3.
+- APK v2 signature and 16KB ZIP alignment pass, with the same signer as beta 1, allowing installation over the previous APK.
+- A real Roku TV returned five configured inputs during a read-only network check. No physical input switch was performed; end-to-end input switching was exercised against a local test fixture. The user reports that the previous Remote APK controls their TV quickly.
+- Focused independent review found a setup-dialog scrolling issue, corrected with a ScrollView. No other important findings were reported.
+
+The following sections record the initial beta 1 verification. Live is unchanged in beta 2.
+
 Scope: PC TV Live Android and web; PC TV Remote Android. No PC is required at runtime. Pro/Lite mobile and iPhone web Remote are not offered. Live mobile is a curated ten-channel edition without the desktop guide or full country catalogue.
 
 ## Automated checks

@@ -140,6 +140,15 @@ def call(operation, payload_json, data_dir, wifi_ip):
                     elif operation == 'status':
                         status = adapter.status(dict(device))
                         result = {'status': {key: status[key] for key in ('online', 'name', 'power', 'paired', 'activeApp') if key in status}}
+                    elif operation == 'inputs':
+                        if device['brand'] != 'roku':
+                            raise ValueError('This TV uses its remote Input button instead of a Roku input picker')
+                        result = {'inputs': adapter.inputs(dict(device))}
+                    elif operation == 'input':
+                        if device['brand'] != 'roku':
+                            raise ValueError('This TV uses its remote Input button instead of a Roku input picker')
+                        adapter.select_input(dict(device), payload.get('input'))
+                        result = {'sent': True}
                     elif operation == 'press':
                         key = payload.get('key')
                         if not isinstance(key, str) or key not in KEYS:

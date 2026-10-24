@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public final class MainActivity extends Activity {
-    private static final int BG=0xff0d0b16, CARD=0xff1a1628, ORANGE=0xffff8a3d, MUTED=0xffb7afca;
+    private static final int BG=0xff101114, CARD=0xff202227, ORANGE=0xffff9b50, MUTED=0xffa9abb3;
     private static final String[] BRANDS={"roku","samsung","lg","vizio","googletv"};
     private static final String[] LABELS={"Roku","Samsung Tizen","LG webOS","Vizio SmartCast","Google TV / Android TV"};
     private static final ExecutorService WORKER=Executors.newSingleThreadExecutor();
@@ -43,14 +43,10 @@ public final class MainActivity extends Activity {
     private GradientDrawable surface(int color){GradientDrawable d=new GradientDrawable();d.setColor(color);d.setCornerRadius(dp(16));return d;}
     private LinearLayout column(){LinearLayout v=new LinearLayout(this);v.setOrientation(LinearLayout.VERTICAL);return v;}
     private TextView text(String value,int size,int color){TextView v=new TextView(this);v.setText(value);v.setTextSize(size);v.setTextColor(color);v.setPadding(0,dp(5),0,dp(5));return v;}
-    private LinearLayout card(LinearLayout parent,String name){
-        LinearLayout v=column();v.setPadding(dp(14),dp(12),dp(14),dp(14));v.setBackground(surface(CARD));
-        LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(-1,-2);p.setMargins(0,dp(14),0,0);parent.addView(v,p);
-        TextView title=text(name,13,ORANGE);title.setTypeface(null,Typeface.BOLD);v.addView(title);return v;
-    }
     private Button button(String label,Runnable action,boolean accent){
         Button b=new Button(this);b.setText(label);b.setAllCaps(false);b.setTextSize(14);b.setMinWidth(0);b.setMinimumWidth(0);
-        b.setPadding(dp(4),dp(5),dp(4),dp(5));b.setTextColor(accent?BG:Color.WHITE);b.setBackground(surface(accent?ORANGE:0xff312943));
+        b.setPadding(dp(4),dp(5),dp(4),dp(5));b.setTextColor(accent?BG:Color.WHITE);
+        b.setBackground(new android.graphics.drawable.RippleDrawable(android.content.res.ColorStateList.valueOf(0x44ffffff),surface(accent?ORANGE:0xff34373e),null));
         b.setOnClickListener(v->action.run());controls.add(b);return b;
     }
     private void row(LinearLayout parent,Button... buttons){
@@ -58,7 +54,7 @@ public final class MainActivity extends Activity {
         for(Button b:buttons){LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(0,dp(56),1);p.setMargins(dp(3),dp(4),dp(3),dp(4));r.addView(b,p);}
         parent.addView(r);
     }
-    private Button key(String label,String code){Button b=button(label,()->submit("press",object("id",selected,"key",code)),code.equals("ok"));b.setContentDescription(code);return b;}
+    private Button key(String label,String code){Button b=button(label,()->submit("press",object("id",selected,"key",code)),code.equals("ok"));String description=switch(code){case "volup"->"Volume up";case "voldown"->"Volume down";case "chup"->"Channel up";case "chdown"->"Channel down";case "rev"->"Rewind";case "fwd"->"Fast forward";case "up"->"Up";case "down"->"Down";case "left"->"Left";case "right"->"Right";default->label;};b.setContentDescription(description);return b;}
     private Spinner spinner(String[] names){Spinner s=new Spinner(this);ArrayAdapter<String>a=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,names);a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);s.setAdapter(a);s.setMinimumHeight(dp(52));controls.add(s);return s;}
     private void buildUi(){
         LinearLayout root=column();root.setBackgroundColor(BG);
@@ -68,34 +64,74 @@ public final class MainActivity extends Activity {
             else v.setPadding(i.getSystemWindowInsetLeft(),i.getSystemWindowInsetTop(),i.getSystemWindowInsetRight(),i.getSystemWindowInsetBottom());return i;
         });
         ScrollView scroll=new ScrollView(this);scroll.setFillViewport(true);root.addView(scroll);
-        LinearLayout content=column();content.setPadding(dp(18),dp(18),dp(18),dp(28));scroll.addView(content);
-        content.addView(text("IN3RT1A / ANDROID BETA",12,ORANGE));
-        TextView title=text("PC TV Remote",30,Color.WHITE);title.setTypeface(null,Typeface.BOLD);content.addView(title);
-        content.addView(text("Your phone. Your TV. No PC needed.",15,MUTED));
-        content.addView(text("Use the same Wi-Fi as your TV. VPNs and guest-network isolation can block connections. TV compatibility varies by model.",12,MUTED));
-        LinearLayout connect=card(content,"01 / CONNECT A TV");
-        brands=spinner(LABELS);brands.setContentDescription("TV brand");connect.addView(brands);
-        row(connect,button("Find TVs",()->submit("discover",object("brand",BRANDS[brands.getSelectedItemPosition()])),true),button("Add by IP",this::manualDialog,false));
-        televisions=spinner(new String[]{"No saved TVs"});televisions.setContentDescription("Saved TVs");connect.addView(televisions);
+        LinearLayout content=column();content.setGravity(Gravity.CENTER_HORIZONTAL);content.setPadding(dp(12),dp(10),dp(12),dp(24));scroll.addView(content);
+        int width=Math.min(dp(364),getResources().getDisplayMetrics().widthPixels-dp(24));
+        LinearLayout header=column();content.addView(header,new LinearLayout.LayoutParams(width,-2));
+        LinearLayout heading=new LinearLayout(this);heading.setGravity(Gravity.CENTER_VERTICAL);header.addView(heading);
+        TextView title=text("PC TV Remote",20,Color.WHITE);title.setTypeface(null,Typeface.BOLD);heading.addView(title,new LinearLayout.LayoutParams(0,-2,1));
+        heading.addView(button("TVs",this::manageDialog,false),new LinearLayout.LayoutParams(dp(64),dp(48)));
+        televisions=spinner(new String[]{"No saved TVs"});televisions.setContentDescription("Saved TVs");header.addView(televisions);
         televisions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?>p,View v,int n,long id){if(n<saved.size()){selected=saved.get(n).optString("id");getPreferences(MODE_PRIVATE).edit().putString("selected",selected).apply();}}
             public void onNothingSelected(AdapterView<?>p){}
         });
-        row(connect,button("Pair / allow",()->submit("pair",object("id",selected)),false),button("Check TV",()->submit("status",object("id",selected)),false),button("Forget",this::forgetDialog,false));
-        progress=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);progress.setIndeterminate(true);progress.setVisibility(View.GONE);connect.addView(progress);
-        status=text("Ready. Choose your TV brand.",14,Color.WHITE);status.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);connect.addView(status);
-        LinearLayout remote=card(content,"02 / REMOTE");
-        row(remote,key("Power","power"),key("Input","input"),key("Home","home"));
-        row(remote,key("Back","back"),key("▲","up"),key("Menu","menu"));
-        row(remote,key("◀","left"),key("OK","ok"),key("▶","right"));
-        row(remote,key("Info","info"),key("▼","down"),key("Exit","exit"));
-        row(remote,key("Vol −","voldown"),key("Mute","mute"),key("Vol +","volup"));
-        row(remote,key("CH −","chdown"),key("Search","search"),key("CH +","chup"));
-        row(remote,key("Rewind","rev"),key("Play","play"),key("Pause","pause"),key("Forward","fwd"));
-        row(remote,key("Replay","replay"),button("Type text",this::textDialog,false));
-        remote.addView(text("Buttons vary by model. Power-on requires network standby. Text supports Roku, Samsung and Google TV.",12,MUTED));
-        content.addView(text("Pairing keys stay in this app’s private storage. No account or remote server required.",12,MUTED));
+        progress=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);progress.setIndeterminate(true);progress.setVisibility(View.INVISIBLE);header.addView(progress,new LinearLayout.LayoutParams(-1,dp(3)));
+        status=text("Choose a TV to get started.",12,MUTED);status.setMinHeight(dp(40));status.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);header.addView(status);
+        LinearLayout remote=column();remote.setGravity(Gravity.CENTER_HORIZONTAL);remote.setPadding(dp(16),dp(16),dp(16),dp(18));
+        GradientDrawable shell=surface(CARD);shell.setCornerRadius(dp(38));shell.setStroke(dp(1),0xff42454c);remote.setBackground(shell);remote.setElevation(dp(6));
+        content.addView(remote,new LinearLayout.LayoutParams(width,-2));
+        LinearLayout top=new LinearLayout(this);top.setGravity(Gravity.CENTER_VERTICAL);remote.addView(top,new LinearLayout.LayoutParams(-1,-2));
+        Button power=key("","power");power.setForeground(getDrawable(R.drawable.ic_power));power.setForegroundGravity(Gravity.CENTER);power.setContentDescription("Power");top.addView(power,new LinearLayout.LayoutParams(dp(58),dp(52)));
+        TextView mark=text("IN3RT1A",12,MUTED);mark.setGravity(Gravity.CENTER);mark.setLetterSpacing(.18f);top.addView(mark,new LinearLayout.LayoutParams(0,-2,1));
+        Button source=button("Input",this::inputAction,false);source.setContentDescription("Input");top.addView(source,new LinearLayout.LayoutParams(dp(64),dp(52)));
+        row(remote,key("Back","back"),key("Home","home"),key("Menu","menu"));
+        FrameLayout pad=new FrameLayout(this);GradientDrawable ring=surface(0xff30333a);ring.setCornerRadius(dp(112));ring.setStroke(dp(1),0xff4d5058);pad.setBackground(ring);
+        LinearLayout.LayoutParams padParams=new LinearLayout.LayoutParams(dp(224),dp(224));padParams.setMargins(0,dp(12),0,dp(12));remote.addView(pad,padParams);
+        direction(pad,"▲","up",Gravity.TOP|Gravity.CENTER_HORIZONTAL,76,64);
+        direction(pad,"▼","down",Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,76,64);
+        direction(pad,"◀","left",Gravity.LEFT|Gravity.CENTER_VERTICAL,64,76);
+        direction(pad,"▶","right",Gravity.RIGHT|Gravity.CENTER_VERTICAL,64,76);
+        Button ok=key("OK","ok");ok.setTextSize(22);ok.setTypeface(null,Typeface.BOLD);GradientDrawable center=surface(ORANGE);center.setCornerRadius(dp(40));
+        ok.setBackground(new android.graphics.drawable.RippleDrawable(android.content.res.ColorStateList.valueOf(0x55ffffff),center,null));pad.addView(ok,new FrameLayout.LayoutParams(dp(80),dp(80),Gravity.CENTER));
+        LinearLayout rockers=new LinearLayout(this);rockers.setGravity(Gravity.CENTER_VERTICAL);remote.addView(rockers,new LinearLayout.LayoutParams(-1,-2));
+        rocker(rockers,"VOLUME","volup","voldown");
+        LinearLayout middle=column();middle.setGravity(Gravity.CENTER);LinearLayout.LayoutParams mid=new LinearLayout.LayoutParams(0,-2,1);mid.setMargins(dp(10),0,dp(10),0);rockers.addView(middle,mid);
+        middle.addView(key("Mute","mute"),new LinearLayout.LayoutParams(-1,dp(52)));TextView live=text("WI-FI\nREMOTE",10,MUTED);live.setGravity(Gravity.CENTER);middle.addView(live);
+        rocker(rockers,"CHANNEL","chup","chdown");
+        View divider=new View(this);divider.setBackgroundColor(0xff41434a);LinearLayout.LayoutParams line=new LinearLayout.LayoutParams(-1,dp(1));line.setMargins(dp(4),dp(15),dp(4),dp(10));remote.addView(divider,line);
+        Button play=key("▶","play"),pause=key("II","pause");play.setContentDescription("Play");pause.setContentDescription("Pause");
+        row(remote,key("≪","rev"),play,pause,key("≫","fwd"));
+        Button typing=button("Text",this::textDialog,false);typing.setContentDescription("Type text on TV");
+        row(remote,key("Replay","replay"),typing,button("More",this::moreDialog,false));
+        TextView footer=text("DIRECT TO TV · NO PC NEEDED",10,MUTED);footer.setGravity(Gravity.CENTER);footer.setPadding(0,dp(18),0,0);content.addView(footer);
         setContentView(root);root.requestApplyInsets();
+    }
+    private void direction(FrameLayout pad,String label,String code,int gravity,int width,int height){
+        Button b=key(label,code);b.setTextSize(22);GradientDrawable clear=surface(Color.TRANSPARENT);clear.setCornerRadius(dp(32));
+        b.setBackground(new android.graphics.drawable.RippleDrawable(android.content.res.ColorStateList.valueOf(0x44ffffff),clear,null));
+        pad.addView(b,new FrameLayout.LayoutParams(dp(width),dp(height),gravity));
+    }
+    private void rocker(LinearLayout parent,String label,String up,String down){
+        LinearLayout r=column();r.setGravity(Gravity.CENTER);r.setPadding(dp(4),dp(4),dp(4),dp(4));r.setBackground(surface(0xff15171b));parent.addView(r,new LinearLayout.LayoutParams(0,-2,1));
+        Button plus=key("+",up),minus=key("−",down);plus.setTextSize(24);minus.setTextSize(24);
+        r.addView(plus,new LinearLayout.LayoutParams(-1,dp(48)));TextView caption=text(label,10,MUTED);caption.setGravity(Gravity.CENTER);r.addView(caption);r.addView(minus,new LinearLayout.LayoutParams(-1,dp(48)));
+    }
+    private void manageDialog(){
+        int first=controls.size();LinearLayout panel=column();panel.setPadding(dp(18),dp(8),dp(18),dp(8));
+        panel.addView(text("Keep your phone and TV on the same Wi-Fi.",14,MUTED));brands=spinner(LABELS);brands.setContentDescription("TV brand");panel.addView(brands);
+        for(JSONObject tv:saved)if(selected.equals(tv.optString("id")))for(int i=0;i<BRANDS.length;i++)if(BRANDS[i].equals(tv.optString("brand")))brands.setSelection(i);
+        ScrollView scroll=new ScrollView(this);scroll.addView(panel);
+        AlertDialog dialog=new AlertDialog.Builder(this).setTitle("Your TVs").setView(scroll).setNegativeButton("Close",null).create();
+        row(panel,button("Find TVs",()->{String brand=BRANDS[brands.getSelectedItemPosition()];dialog.dismiss();submit("discover",object("brand",brand));},true),button("Add by IP",()->{dialog.dismiss();manualDialog();},false));
+        row(panel,button("Pair / allow",()->{dialog.dismiss();submit("pair",object("id",selected));},false),button("Check TV",()->{dialog.dismiss();submit("status",object("id",selected));},false));
+        row(panel,button("Forget TV",()->{dialog.dismiss();forgetDialog();},false));
+        panel.addView(text("Pairing keys stay on this phone. Some buttons depend on your TV model; power-on needs network standby.",12,MUTED));
+        dialog.setOnDismissListener(d->controls.subList(first,controls.size()).clear());dialog.show();
+    }
+    private void moreDialog(){String[] labels={"Info","Search","Exit"},keys={"info","search","exit"};new AlertDialog.Builder(this).setTitle("More controls").setItems(labels,(d,w)->submit("press",object("id",selected,"key",keys[w]))).setNegativeButton("Close",null).show();}
+    private void inputAction(){
+        for(JSONObject tv:saved)if(selected.equals(tv.optString("id"))&&tv.optString("brand").equals("roku")){submit("inputs",object("id",selected));return;}
+        submit("press",object("id",selected,"key","input"));
     }
     private static JSONObject object(String... pairs){JSONObject o=new JSONObject();try{for(int n=0;n<pairs.length;n+=2)o.put(pairs[n],pairs[n+1]);}catch(JSONException e){throw new IllegalArgumentException(e);}return o;}
     private EditText input(String hint,int type){EditText e=new EditText(this);e.setHint(hint);e.setSingleLine(true);e.setInputType(type);e.setPadding(dp(18),dp(10),dp(18),dp(10));return e;}
@@ -112,7 +148,7 @@ public final class MainActivity extends Activity {
             for(LinkAddress a:p.getLinkAddresses())if(a.getAddress() instanceof Inet4Address){wifiNetwork=n;return a.getAddress().getHostAddress();}
         }return "";
     }
-    private void setBusy(boolean value){busy=value;for(View v:controls)v.setEnabled(!value);progress.setVisibility(value?View.VISIBLE:View.GONE);}
+    private void setBusy(boolean value){busy=value;for(View v:controls)v.setEnabled(!value);progress.setVisibility(value?View.VISIBLE:View.INVISIBLE);}
     private void submit(String operation,JSONObject payload){
         if(busy||destroyed)return;
         if(!operation.equals("list")&&!operation.equals("add")&&!operation.equals("discover")&&selected.isEmpty()){status.setText("Choose or add a saved TV first.");return;}
@@ -144,6 +180,10 @@ public final class MainActivity extends Activity {
     private void handle(String operation,String requestedId,String raw){
         try{
             JSONObject r=new JSONObject(raw);if(!r.optBoolean("ok")){status.setText(r.optString("error","Request failed."));return;}
+            if(operation.equals("inputs")){
+                JSONArray inputs=r.getJSONArray("inputs");String[] labels=new String[inputs.length()];for(int i=0;i<labels.length;i++){JSONObject entry=inputs.getJSONObject(i);String id=entry.optString("id");String port=id.startsWith("tvinput.hdmi")?"HDMI "+id.substring(12):id.equals("tvinput.dtv")?"Antenna":id.equals("tvinput.cvbs")?"AV":"";labels[i]=entry.optString("name")+(port.isEmpty()?"":" · "+port);}
+                status.setText("Choose the input to watch.");new AlertDialog.Builder(this).setTitle("TV inputs").setItems(labels,(d,w)->{JSONObject entry=inputs.optJSONObject(w);if(entry!=null)submit("input",object("id",requestedId,"input",entry.optString("id")));}).setNegativeButton("Cancel",null).show();return;
+            }
             if(operation.equals("discover")){
                 JSONArray found=r.optJSONArray("devices");String warning=r.optString("warning");
                 if(found==null||found.length()==0){status.setText(warning.isEmpty()?"No TVs found. Check the brand and Wi-Fi, or use Add by IP.":warning);return;}
@@ -160,7 +200,7 @@ public final class MainActivity extends Activity {
             else if(operation.equals("status")){JSONObject s=r.getJSONObject("status");String message=s.optBoolean("online")?"TV is online.":"TV is offline or in standby.";if(s.has("paired")&&!s.optBoolean("paired"))message+=" Pair this TV to send commands.";status.setText(message);}
             else if(operation.equals("add"))status.setText("TV saved. Use Pair / allow if your TV requires pairing.");
             else if(operation.equals("forget"))status.setText("TV forgotten.");
-            else if(operation.equals("list"))status.setText(saved.isEmpty()?"Choose your TV brand, then find or add a TV.":"Select your TV, then pair or use the remote.");
+            else if(operation.equals("list"))status.setText(saved.isEmpty()?"Tap TVs to find or add your TV.":"Ready when you are.");
             else status.setText("Command sent.");
         }catch(JSONException e){status.setText("Could not read the TV response. Please try again.");}
     }
