@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0b16">
+  <meta name="description" content="Watch a selection of public live TV channels on your phone. No PC required.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PC TV Live">
+  <meta name="referrer" content="no-referrer">
+  <title>PC TV Live — watch on your phone</title>
+  <link rel="icon" href="./icon-144.png" type="image/png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./vendor/hls-1.7.3.min.js" defer></script>
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#channels">Skip to channels</a>
+  <header class="masthead">
+    <a class="brand" href="./" aria-label="PC TV Live home"><img src="./icon-144.png" alt="" width="48" height="48"><span>PC TV <strong>Live</strong><small>TV, wherever you are.</small></span></a>
+    <button id="install" class="quiet" type="button">Install</button>
+  </header>
+  <main>
+    <div class="intro"><h1>Find your next channel.</h1><p>No PC required. Just your phone and an internet connection.</p></div>
+    <div class="layout">
+      <section class="watch" aria-labelledby="now-title">
+        <div class="screen" id="screen">
+          <video id="video" controls playsinline preload="none" x-webkit-airplay="allow" aria-label="Live TV player"></video>
+          <div id="welcome" class="welcome"><span class="play-mark" aria-hidden="true">▶</span><strong>A little news. A little adventure.</strong><span>Choose a channel below to start watching.</span></div>
+        </div>
+        <div class="now"><div class="signal"><span id="state-dot" class="dot"></span><span id="state-label">Ready to watch</span></div><h2 id="now-title">Your seat is ready.</h2><p id="now-description">Live television streamed directly to your device.</p>
+          <p id="status" role="status" aria-live="polite">Select a channel to start.</p>
+          <div class="player-actions"><button id="retry" class="primary" type="button" hidden>Try again</button><button id="stop" class="quiet" type="button" hidden>Stop</button><button id="airplay" class="quiet" type="button" hidden>AirPlay</button><a id="source-link" class="quiet link" target="_blank" rel="noopener noreferrer" hidden>Broadcaster website</a></div>
+          <p class="player-tip" id="player-tip">On iPhone, use the player’s full-screen or AirPlay control to watch your way.</p>
+        </div>
+        <details class="about"><summary>About these channels</summary><p>This is a small, curated selection of public streams, separate from the desktop app. No sign-in, PC, or home server is required.</p><p>Streams come from broadcasters and their distribution platforms. Availability varies by country, connection and device. Channels may include ads or stop broadcasting. This app cannot unlock restricted channels.</p><p>Search and favorites work offline after installation; live video always needs internet. There is no recording, desktop library, program schedule, Roku remote, or Chromecast sender here.</p><p>Channel metadata: <a href="https://iptv-org.github.io/" target="_blank" rel="noopener noreferrer">iptv-org</a>. Playback: <a href="https://github.com/video-dev/hls.js" target="_blank" rel="noopener noreferrer">hls.js</a> (<a href="./vendor/hls-LICENSE.txt">Apache 2.0</a>). Stream rights remain with their owners.</p></details>
+      </section>
+      <section class="guide" id="channels" aria-labelledby="guide-title">
+        <div class="guide-heading"><h2 id="guide-title">Channel guide</h2><span id="count"></span></div>
+        <label class="search-label" for="search">Search channels</label><div class="search"><span aria-hidden="true">⌕</span><input type="search" id="search" placeholder="Name, country, or something to watch" autocomplete="off"><button id="clear" type="button" aria-label="Clear search" hidden>×</button></div>
+        <div class="filters" aria-label="Filter channels"><label for="category">Category</label><select id="category"><option>All</option><option>News</option><option>Sport</option><option>Entertainment</option></select><button id="favorites" type="button" aria-pressed="false">♡ Favorites</button></div>
+        <p id="storage-status" class="notice" role="status" hidden></p>
+        <div id="channel-list" class="channel-list"></div>
+        <div id="empty" class="empty" hidden><h3>No channels match.</h3><p id="empty-message">Try a different search or category.</p><button id="reset" class="quiet" type="button">Show all channels</button></div>
+        <p class="catalog-note">10 selected channels. Some streams may be unavailable in your region.</p>
+      </section>
+    </div>
+  </main>
+  <footer>PC TV Live <span>Made for the screen in your hand.</span></footer>
+  <dialog id="install-dialog" aria-labelledby="install-title"><form method="dialog"><button class="dialog-close" aria-label="Close install instructions">×</button></form><img src="./icon-144.png" width="64" height="64" alt=""><h2 id="install-title">Keep Live on your home screen.</h2><p>On iPhone, open this page in <strong>Safari</strong>, tap <strong>Share</strong>, then <strong>Add to Home Screen</strong> and <strong>Add</strong>. You may need to scroll down the Share menu.</p><p>On Android, use your browser’s <strong>Install app</strong> or <strong>Add to Home screen</strong> menu. Installation needs this site to be served over HTTPS.</p><p class="muted">No PC needed to watch. Video still requires internet.</p></dialog>
+  <noscript><p class="notice">Enable JavaScript to browse channels and play live TV.</p></noscript>
+</body>
+</html>

@@ -1,0 +1,150 @@
+[
+  {
+    "name": "CBS News 24/7",
+    "checked": "2026-10-24T00:25:15.264Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      200,
+      206
+    ],
+    "cors": [
+      "*",
+      "*",
+      "*"
+    ]
+  },
+  {
+    "name": "DW English",
+    "checked": "2026-10-24T00:25:15.844Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      200,
+      206
+    ],
+    "cors": [
+      "*",
+      "*",
+      "*"
+    ]
+  },
+  {
+    "name": "France 24 English",
+    "checked": "2026-10-24T00:25:15.845Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      206
+    ],
+    "cors": [
+      "https://example.com",
+      "https://example.com"
+    ]
+  },
+  {
+    "name": "NHK World-Japan",
+    "checked": "2026-10-24T00:25:15.845Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      200,
+      206
+    ],
+    "cors": [
+      "*",
+      "*",
+      "*"
+    ]
+  },
+  {
+    "name": "Euronews English",
+    "checked": "2026-10-24T00:25:15.846Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      200,
+      206
+    ],
+    "cors": [
+      "*",
+      "*",
+      "*"
+    ]
+  },
+  {
+    "name": "ABC News Australia",
+    "checked": "2026-10-24T00:25:15.847Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      200,
+      206
+    ],
+    "cors": [
+      "*",
+      "*",
+      "*"
+    ]
+  },
+  {
+    "name": "Red Bull TV",
+    "checked": "2026-10-24T00:25:15.847Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      200,
+      206
+    ],
+    "cors": [
+      "*",
+      "*",
+      "*"
+    ]
+  },
+  {
+    "name": "FailArmy",
+    "checked": "2026-10-24T00:25:15.849Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      200,
+      206
+    ],
+    "cors": [
+      "*",
+      "*",
+      "*"
+    ]
+  },
+  {
+    "name": "The Pet Collective",
+    "checked": "2026-10-24T00:25:15.853Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      200,
+      206
+    ],
+    "cors": [
+      "*",
+      "*",
+      "*"
+    ]
+  },
+  {
+    "name": "Outdoor America",
+    "checked": "2026-10-24T00:25:15.854Z",
+    "playlistAndMediaOK": true,
+    "httpStatuses": [
+      200,
+      200,
+      206
+    ],
+    "cors": [
+      "*",
+      "*",
+      "*"
+    ]
+  }
+]

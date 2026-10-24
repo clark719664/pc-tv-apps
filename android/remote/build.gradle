@@ -1,0 +1,30 @@
+plugins { id 'com.android.application'; id 'com.chaquo.python' }
+android {
+    namespace 'com.in3rt1a.pctv.remote'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'com.in3rt1a.pctv.remote'
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName '2026.10.23-beta1'
+        ndk { abiFilters 'arm64-v8a', 'x86_64' }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    buildTypes.release { minifyEnabled false }
+}
+chaquopy {
+    defaultConfig {
+        version = '3.11'
+        pip {
+            install 'websocket-client==1.9.0'
+            install 'androidtvremote2==0.3.1'
+            install 'aiofiles==25.1.0'
+            install 'cryptography==42.0.8'
+            install 'protobuf==7.36.2'
+            install 'cffi==1.17.1'
+            install 'pycparser==3.12'
+        }
+    }
+}
+apply from: '../signing.gradle'

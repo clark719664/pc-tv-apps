@@ -1,6 +1,6 @@
 <p align="center"><img src="assets/brand-1024.png" alt="IN3RT1A" width="120"></p>
 
-# IN3RT1A apps for Windows and Linux
+# IN3RT1A apps for desktop and mobile
 
 Free apps that get your PC and your TVs working together.
 
@@ -21,7 +21,25 @@ Free apps that get your PC and your TVs working together.
 
 Portable ZIPs, SHA-256 checksums and third-party source code are on [the latest release](https://github.com/clark719664/pc-tv-apps/releases/latest).
 
-## Screenshots
+## Standalone mobile beta
+
+These mobile versions run without a PC. They are separate, smaller versions of the desktop apps.
+
+| App | Android | iPhone web |
+|---|---|---|
+| PC TV Live | [APK](https://github.com/clark719664/pc-tv-apps/releases/download/mobile-v2026.10.23-beta1/PC-TV-Live-Android.apk) | [Open web app](https://clark719664.github.io/pc-tv-apps/live/) |
+| PC TV Remote | [APK](https://github.com/clark719664/pc-tv-apps/releases/download/mobile-v2026.10.23-beta1/PC-TV-Remote-Android.apk) | Not offered: browser networking cannot supply the existing TV protocols |
+| PC Cast Pro / Lite | Not offered: desktop casting engine needs a separate port | Not offered |
+
+Live mobile has a curated selection of direct HTTPS channels, search and favorites. It does not include the desktop guide, full country catalogue, PC library, web-page extraction, conversion or multi-TV casting. Safari offers AirPlay where supported. Channels may be offline or region restricted; an internet connection is required.
+
+Remote bundles its own Python runtime and talks directly to TVs on the same Wi-Fi. Roku, Samsung, LG, Vizio and Google/Android TV adapters are included as beta compatibility paths. Real phone/TV compatibility is not established by a successful build. The app opens no server and stores pairing data in its private storage with Android backups disabled.
+
+Android requires version 7 or later; Remote supports arm64-v8a and x86_64. iPhone: Safari → Share → Add to Home Screen. Android TV and Fire TV are not validated installation targets for these phone/tablet apps.
+
+See [mobile release notes](https://github.com/clark719664/pc-tv-apps/releases/tag/mobile-v2026.10.23-beta1) for exact verification, checksums and source. Build instructions are in [android/README.md](android/README.md).
+
+## Desktop screenshots
 
 **PC Cast Pro** (your video library, with profiles)
 

@@ -1,0 +1,14 @@
+def signingFile = System.getenv('PCTV_SIGNING_FILE')
+if (signingFile) {
+    def keys = new Properties()
+    file(signingFile).withInputStream { keys.load(it) }
+    android.signingConfigs {
+        release {
+            storeFile = file(keys.getProperty('storeFile'))
+            storePassword = keys.getProperty('storePassword')
+            keyAlias = keys.getProperty('keyAlias')
+            keyPassword = keys.getProperty('keyPassword')
+        }
+    }
+    android.buildTypes.release.signingConfig = android.signingConfigs.release
+}
