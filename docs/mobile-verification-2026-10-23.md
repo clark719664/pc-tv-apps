@@ -1,5 +1,14 @@
 # Standalone mobile beta verification
 
+## Remote beta 3 update (2026-10-24)
+
+The previous scan flow remembered only the TV selected from its results, so the saved-TV dropdown could contain just one TV even after discovering several. Scanning now merges every discovered TV into the saved list, preserving existing IDs, pairing details and TVs absent from a later scan. An explicit Choose TV dialog replaces the saved-TV Spinner. Run Find TVs again after updating to populate the list from a prior scan.
+
+- 20 backend tests pass, including all discovered TVs surviving a reload, routing a command to the second TV, duplicate suppression, and preserving pairing details and unseen TVs after repeated/interrupted discovery.
+- The signed release APK passes Android build/lint (0 errors, 13 warnings), v2 signature verification with the existing signer, and 16KB ZIP alignment.
+- Android 16 emulator: two TVs added, both appear in the picker, switching works in both directions, the active selection and full list survive process restart, and the picker remains usable after a network status request. Regression script: `tests/remote-selector-android.py`.
+- Independent focused review found no important issues. Physical-phone confirmation remains with the user. Live and the existing command transport are unchanged.
+
 ## Remote beta 2 update
 
 Remote versionCode 2 adds a handheld remote layout with a circular D-pad, volume/channel rockers, playback controls, and a separate scrollable TVs setup panel. The existing command transport remains in place. Roku Input now lists the TV's configured inputs and launches the chosen input; duplicate friendly names include HDMI port numbers. Streaming sticks with no TV inputs receive an explicit explanation.

@@ -70,6 +70,38 @@ class BridgeTests(unittest.TestCase):
         self.assertEqual([d['ip'] for d in result['devices']], ['192.168.1.20'])
         self.assertTrue(result['warning'])
 
+    def test_scan_remembers_every_tv_for_selector_after_restart(self):
+        self.adapter.discover.return_value = [
+            {'ip': '192.168.1.20', 'name': 'Upstairs'},
+            {'ip': '192.168.1.21', 'name': 'Downstairs'},
+            {'ip': '192.168.1.21', 'name': 'Duplicate'},
+        ]
+        result = self.call('discover', brand='roku')
+        self.assertEqual(len(result['savedDevices']), 2)
+        # A new bridge call reloads the on-disk list, as a restarted app does.
+        saved = self.call('list')['devices']
+        self.assertEqual([d['name'] for d in saved], ['Upstairs', 'Downstairs'])
+        chosen = self.call('add', brand='roku', ip='192.168.1.20')['device']
+        self.assertEqual(chosen['id'], saved[0]['id'])
+        self.assertEqual(len(self.call('list')['devices']), 2)
+        self.call('press', id=saved[1]['id'], key='home')
+        self.assertEqual(self.adapter.press.call_args.args[0]['ip'], '192.168.1.21')
+
+    def test_rescan_preserves_pairing_ids_and_unseen_tvs(self):
+        ident = self.add()
+        self.call('pair', id=ident)
+        other = self.call('add', brand='roku', ip='192.168.1.22')['device']['id']
+        self.adapter.discover.return_value = [{'ip': '192.168.1.20', 'name': 'Renamed TV'}]
+        result = self.call('discover', brand='roku')
+        self.assertEqual([d['id'] for d in result['savedDevices']], [ident, other])
+        self.assertTrue(result['savedDevices'][0]['paired'])
+        self.assertNotIn('secret', json.dumps(result))
+        self.call('press', id=ident, key='home')
+        self.assertEqual(self.adapter.press.call_args.args[0]['token'], 'secret')
+        self.adapter.discover.side_effect = OSError('network interrupted')
+        self.call('discover', brand='roku')
+        self.assertEqual(len(self.call('list')['devices']), 2)
+
     def test_forget_removes_saved_credentials(self):
         ident = self.add()
         self.call('pair', id=ident)

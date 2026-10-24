@@ -27,7 +27,8 @@ public final class MainActivity extends Activity {
     private static final Handler MAIN=new Handler(Looper.getMainLooper());
     private final List<View> controls=new ArrayList<>();
     private final List<JSONObject> saved=new ArrayList<>();
-    private Spinner brands, televisions;
+    private Spinner brands;
+    private Button televisions;
     private TextView status;
     private ProgressBar progress;
     private String selected="";
@@ -70,11 +71,8 @@ public final class MainActivity extends Activity {
         LinearLayout heading=new LinearLayout(this);heading.setGravity(Gravity.CENTER_VERTICAL);header.addView(heading);
         TextView title=text("PC TV Remote",20,Color.WHITE);title.setTypeface(null,Typeface.BOLD);heading.addView(title,new LinearLayout.LayoutParams(0,-2,1));
         heading.addView(button("TVs",this::manageDialog,false),new LinearLayout.LayoutParams(dp(64),dp(48)));
-        televisions=spinner(new String[]{"No saved TVs"});televisions.setContentDescription("Saved TVs");header.addView(televisions);
-        televisions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            public void onItemSelected(AdapterView<?>p,View v,int n,long id){if(n<saved.size()){selected=saved.get(n).optString("id");getPreferences(MODE_PRIVATE).edit().putString("selected",selected).apply();}}
-            public void onNothingSelected(AdapterView<?>p){}
-        });
+        televisions=button("Find a TV",this::chooseTvDialog,false);televisions.setGravity(Gravity.CENTER_VERTICAL|Gravity.START);televisions.setPadding(dp(14),dp(8),dp(14),dp(8));televisions.setSingleLine(true);televisions.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        LinearLayout.LayoutParams selector=new LinearLayout.LayoutParams(-1,dp(52));selector.setMargins(0,dp(8),0,dp(4));header.addView(televisions,selector);
         progress=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);progress.setIndeterminate(true);progress.setVisibility(View.INVISIBLE);header.addView(progress,new LinearLayout.LayoutParams(-1,dp(3)));
         status=text("Choose a TV to get started.",12,MUTED);status.setMinHeight(dp(40));status.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);header.addView(status);
         LinearLayout remote=column();remote.setGravity(Gravity.CENTER_HORIZONTAL);remote.setPadding(dp(16),dp(16),dp(16),dp(18));
@@ -129,6 +127,17 @@ public final class MainActivity extends Activity {
         dialog.setOnDismissListener(d->controls.subList(first,controls.size()).clear());dialog.show();
     }
     private void moreDialog(){String[] labels={"Info","Search","Exit"},keys={"info","search","exit"};new AlertDialog.Builder(this).setTitle("More controls").setItems(labels,(d,w)->submit("press",object("id",selected,"key",keys[w]))).setNegativeButton("Close",null).show();}
+    private void updateTvSelector(){
+        String label="Find a TV";for(JSONObject tv:saved)if(selected.equals(tv.optString("id")))label=tv.optString("name")+" · "+tv.optString("ip")+"  ▾";
+        televisions.setText(label);televisions.setContentDescription("Choose TV: "+label);
+        getPreferences(MODE_PRIVATE).edit().putString("selected",selected).apply();
+    }
+    private void chooseTvDialog(){
+        if(saved.isEmpty()){manageDialog();return;}
+        String[] labels=new String[saved.size()];int active=-1;
+        for(int i=0;i<saved.size();i++){JSONObject tv=saved.get(i);labels[i]=tv.optString("name")+" · "+tv.optString("ip");if(selected.equals(tv.optString("id")))active=i;}
+        new AlertDialog.Builder(this).setTitle("Choose TV").setSingleChoiceItems(labels,active,(d,w)->{selected=saved.get(w).optString("id");updateTvSelector();status.setText("Ready to control "+saved.get(w).optString("name")+".");d.dismiss();}).setNeutralButton("Find / add TVs",(d,w)->manageDialog()).setNegativeButton("Cancel",null).show();
+    }
     private void inputAction(){
         for(JSONObject tv:saved)if(selected.equals(tv.optString("id"))&&tv.optString("brand").equals("roku")){submit("inputs",object("id",selected));return;}
         submit("press",object("id",selected,"key","input"));
@@ -171,11 +180,9 @@ public final class MainActivity extends Activity {
         });
     }
     private void showSaved(JSONArray devices){
-        saved.clear();List<String> names=new ArrayList<>();int active=0;
-        for(int i=0;i<devices.length();i++){JSONObject d=devices.optJSONObject(i);if(d==null)continue;if(selected.equals(d.optString("id")))active=saved.size();saved.add(d);names.add(d.optString("name")+" · "+d.optString("ip"));}
-        if(saved.isEmpty()){selected="";names.add("No saved TVs");}else selected=saved.get(active).optString("id");
-        ArrayAdapter<String> a=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,names);a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);televisions.setAdapter(a);televisions.setSelection(active);
-        getPreferences(MODE_PRIVATE).edit().putString("selected",selected).apply();
+        saved.clear();int active=0;
+        for(int i=0;i<devices.length();i++){JSONObject d=devices.optJSONObject(i);if(d==null)continue;if(selected.equals(d.optString("id")))active=saved.size();saved.add(d);}
+        selected=saved.isEmpty()?"":saved.get(active).optString("id");updateTvSelector();
     }
     private void handle(String operation,String requestedId,String raw){
         try{
@@ -185,9 +192,10 @@ public final class MainActivity extends Activity {
                 status.setText("Choose the input to watch.");new AlertDialog.Builder(this).setTitle("TV inputs").setItems(labels,(d,w)->{JSONObject entry=inputs.optJSONObject(w);if(entry!=null)submit("input",object("id",requestedId,"input",entry.optString("id")));}).setNegativeButton("Cancel",null).show();return;
             }
             if(operation.equals("discover")){
+                if(r.has("savedDevices"))showSaved(r.getJSONArray("savedDevices"));
                 JSONArray found=r.optJSONArray("devices");String warning=r.optString("warning");
                 if(found==null||found.length()==0){status.setText(warning.isEmpty()?"No TVs found. Check the brand and Wi-Fi, or use Add by IP.":warning);return;}
-                status.setText(warning.isEmpty()?"Found "+found.length()+" TV(s). Choose one to save.":warning);
+                status.setText(warning.isEmpty()?"Found "+found.length()+" TV(s). All are remembered; choose one to control.":warning);
                 String[] labels=new String[found.length()];for(int i=0;i<labels.length;i++){JSONObject d=found.getJSONObject(i);labels[i]=d.optString("name")+" · "+d.optString("ip");}
                 new AlertDialog.Builder(this).setTitle("TVs on your Wi-Fi").setItems(labels,(d,w)->{JSONObject tv=found.optJSONObject(w);if(tv!=null)submit("add",tv);}).setNegativeButton("Close",null).show();return;
             }

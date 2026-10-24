@@ -112,7 +112,18 @@ def call(operation, payload_json, data_dir, wifi_ip):
                                       'model': str(item.get('model') or '')[:100]})
                 except Exception:
                     warning = 'Discovery was interrupted. Results may be incomplete; you can add the TV by IP.'
-                result = {'devices': found, 'warning': warning}
+                # Keep every discovered TV available for switching, not only
+                # the one selected in the discovery result dialog.
+                for item in found:
+                    existing = next((d for d in devices if d['brand'] == brand and d['ip'] == item['ip']), None)
+                    if existing is None:
+                        devices.append({**item, 'id': str(uuid.uuid4()),
+                                        'paired': not adapters.ADAPTERS[brand].needs_pairing})
+                    else:
+                        existing.update(name=item['name'], model=item['model'])
+                if found:
+                    _save(path, devices)
+                result = {'devices': found, 'savedDevices': [_public(d) for d in devices], 'warning': warning}
             else:
                 device = next((d for d in devices if d['id'] == payload.get('id')), None)
                 if device is None:

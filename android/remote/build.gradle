@@ -6,8 +6,8 @@ android {
         applicationId 'com.in3rt1a.pctv.remote'
         minSdk 24
         targetSdk 36
-        versionCode 2
-        versionName '2026.10.23-beta2'
+        versionCode 3
+        versionName '2026.10.24-beta3'
         ndk { abiFilters 'arm64-v8a', 'x86_64' }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
