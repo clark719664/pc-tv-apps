@@ -10,7 +10,7 @@ Free apps that get your PC and your TVs working together.
 
 | App | What it does | Windows | Linux |
 |---|---|---|---|
-| **PC Cast Pro** | The whole package: TV remote, casting from any link, multicast to many TVs, your PC's video library, multi-screen grids and free live TV | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/download/v2026.10.23.1/PC-Cast-Pro-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Pro-Linux-x86_64.tar.gz) |
+| **PC Cast Pro** | The whole package: TV remote, casting from any link, multicast to many TVs, your PC's video library, multi-screen grids and free live TV | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Pro-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Pro-Linux-x86_64.tar.gz) |
 | **PC Cast Lite** | Just the casting. Paste a link and it plays on one TV or several | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Lite-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-Cast-Lite-Linux-x86_64.tar.gz) |
 | **PC TV Live** | Just free live TV: pick your country, get its channels and a guide | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Live-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Live-Linux-x86_64.tar.gz) |
 | **PC TV Remote** | Just the remote, in a small download | [Setup.exe](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Remote-Setup.exe) | [tar.gz](https://github.com/clark719664/pc-tv-apps/releases/latest/download/PC-TV-Remote-Linux-x86_64.tar.gz) |
@@ -57,20 +57,17 @@ See [mobile release notes](https://github.com/clark719664/pc-tv-apps/releases/ta
 
 <img src="assets/screenshot-lite.png" alt="PC Cast Lite welcome screen" width="720">
 
-## PC Cast Pro for Windows — 2026.10.23.1
+## What's new in 2026.10.30.1
 
-Retries incomplete video segments, recovers stalled conversion workers, preserves selected quality metadata, and fixes profile PIN handling after a session expires. Public downloads contain no private source catalogs or personal settings.
+Reliability fixes for casting, now in all four apps on Windows and Linux.
 
-[Windows update, portable ZIP, application source and checksums](https://github.com/clark719664/pc-tv-apps/releases/tag/v2026.10.23.1). Linux and the other editions remain on the preceding release.
+- **Casting a link is steadier**: every video segment is fetched completely before it goes to the TV, so a stalled or cut-short download no longer leaves a hole or broken frames; sources that answer "too many requests" are left alone for a while.
+- **Long videos keep playing**: a video that was still casting can no longer be dropped from the app's short-term cache partway through.
+- **Roku starts converted streams from any point**, and converted audio is sent as plain stereo AAC that every Roku decodes. Live streams are flagged as live.
+- **Quality picker shows the truth**: each option lists its own resolution, frame rate, codec and bit rate, and the label after you pick matches what plays.
+- **Episodes and queues**: Next/Previous, continuous play, 10-second skips and a per-season Skip intro marker for cast episodes; a play-in-order queue for links and YouTube videos; signed-in YouTube home shows the account's own recommendations.
 
-## What's new in 2026.10.21.3
-
-- **Cast a link plays the best version**: PC Cast Pro and Lite pick the highest resolution a page offers, up to 4K, and show what you're getting, for example `1080p60 · 6.2 Mb/s · H.264`.
-- **More pages work**: broadcasters' live pages and news sites with an embedded YouTube, Vimeo, Dailymotion or Twitch player, PeerTube video sites, and direct links to video files and HLS or DASH streams.
-- **Clear reasons** when a link can't play: it needs a sign-in, isn't available in your region, isn't live right now, or is gone.
-- **PC TV Live guide** (since 2026.10.21.2): schedules for ABC, CBS, NBC, Fox, PBS and ION Plus, and a full day of Pluto TV and Plex listings.
-
-Earlier this month: PC TV Live, multicast to many TVs, embedded players, Linux versions of all four apps, and donor messages. See [all releases](https://github.com/clark719664/pc-tv-apps/releases).
+[Downloads, portable ZIPs, application source and checksums](https://github.com/clark719664/pc-tv-apps/releases/latest). Earlier releases: best-quality cast-a-link, more pages, PC TV Live guide, multicast, embedded players and Linux builds. See [all releases](https://github.com/clark719664/pc-tv-apps/releases).
 
 ## Setup
 
