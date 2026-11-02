@@ -60,7 +60,7 @@ try {
   await webPage.goto(url);
   await webPage.evaluate(() => navigator.serviceWorker.ready);
   await webPage.getByRole('button',{name:'Install',exact:true}).click();
-  await webPage.getByRole('heading',{name:'Keep Live on your home screen.'}).waitFor();
+  await webPage.getByRole('heading',{name:'Install PC TV Live'}).waitFor();
   await webPage.getByRole('button',{name:'Close install instructions'}).click();
   await web.setOffline(true);
   // This Chromium build blocks network traffic but leaves navigator.onLine true.

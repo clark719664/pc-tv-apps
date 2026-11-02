@@ -18,6 +18,7 @@ function setStatus(next, message) {
   state = next;
   $('state-label').textContent = labels[next];
   $('state-dot').dataset.state = next;
+  $('state-dot').parentElement.hidden = next === 'idle';
   $('status').textContent = message;
   $('retry').hidden = !selected || !['error','offline','paused'].includes(next);
 }
@@ -221,7 +222,6 @@ $('install').addEventListener('click', async () => {
 });
 if (window.PCTVPlayer || window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) $('install').hidden = true;
 if (window.PCTVPlayer) {
-  $('player-tip').textContent = 'Channels open in the Android video player. Use Back to return to the guide.';
   $('screen').hidden = true;
   document.querySelector('.watch').classList.add('native');
 }

@@ -1,0 +1,58 @@
+{
+  "result": "PASS",
+  "originalDestinations": 24,
+  "preservedDestinations": 24,
+  "measuredStates": 8,
+  "measurements": [
+    {
+      "width": 320,
+      "open": false,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "width": 320,
+      "open": true,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "width": 390,
+      "open": false,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "width": 390,
+      "open": true,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "width": 768,
+      "open": false,
+      "scrollWidth": 768,
+      "outside": []
+    },
+    {
+      "width": 768,
+      "open": true,
+      "scrollWidth": 768,
+      "outside": []
+    },
+    {
+      "width": 1280,
+      "open": false,
+      "scrollWidth": 1280,
+      "outside": []
+    },
+    {
+      "width": 1280,
+      "open": true,
+      "scrollWidth": 1280,
+      "outside": []
+    }
+  ],
+  "keyboardDisclosure": "pass",
+  "pageErrors": []
+}

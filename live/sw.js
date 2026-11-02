@@ -1,4 +1,4 @@
-const CACHE = 'pctv-live-shell-v1';
+const CACHE = 'pctv-live-shell-v2';
 const SHELL = ['./','./index.html','./styles.css','./app.mjs','./catalog.mjs','./manifest.webmanifest','./icon-144.png','./icon-192.png','./icon-512.png','./vendor/hls-1.7.3.min.js','./vendor/hls-LICENSE.txt'];
 const shellUrls = new Set(SHELL.map(path => new URL(path, self.registration.scope).href));
 self.addEventListener('install', event => {

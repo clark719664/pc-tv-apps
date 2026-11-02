@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public final class MainActivity extends Activity {
-    private static final int BG=0xff101114, CARD=0xff202227, ORANGE=0xffff9b50, MUTED=0xffa9abb3;
+    private static final int BG=0xff101114, CARD=0xff191b20, LINE=0xff262931, INK=0xfff4f4f5, ACCENT=0xff6d9fff, MUTED=0xffa1a1aa;
     private static final String[] BRANDS={"roku","samsung","lg","vizio","googletv"};
     private static final String[] LABELS={"Roku","Samsung Tizen","LG webOS","Vizio SmartCast","Google TV / Android TV"};
     private static final ExecutorService WORKER=Executors.newSingleThreadExecutor();
@@ -41,18 +41,18 @@ public final class MainActivity extends Activity {
         buildUi(); submit("list",new JSONObject());
     }
     private int dp(int n){return Math.round(n*getResources().getDisplayMetrics().density);}
-    private GradientDrawable surface(int color){GradientDrawable d=new GradientDrawable();d.setColor(color);d.setCornerRadius(dp(16));return d;}
+    private GradientDrawable surface(int color){GradientDrawable d=new GradientDrawable();d.setColor(color);d.setCornerRadius(dp(10));return d;}
     private LinearLayout column(){LinearLayout v=new LinearLayout(this);v.setOrientation(LinearLayout.VERTICAL);return v;}
     private TextView text(String value,int size,int color){TextView v=new TextView(this);v.setText(value);v.setTextSize(size);v.setTextColor(color);v.setPadding(0,dp(5),0,dp(5));return v;}
     private Button button(String label,Runnable action,boolean accent){
         Button b=new Button(this);b.setText(label);b.setAllCaps(false);b.setTextSize(14);b.setMinWidth(0);b.setMinimumWidth(0);
-        b.setPadding(dp(4),dp(5),dp(4),dp(5));b.setTextColor(accent?BG:Color.WHITE);
-        b.setBackground(new android.graphics.drawable.RippleDrawable(android.content.res.ColorStateList.valueOf(0x44ffffff),surface(accent?ORANGE:0xff34373e),null));
+        b.setPadding(dp(4),dp(5),dp(4),dp(5));b.setTextColor(accent?BG:INK);
+        b.setBackground(new android.graphics.drawable.RippleDrawable(android.content.res.ColorStateList.valueOf(0x24ffffff),surface(accent?ACCENT:LINE),null));
         b.setOnClickListener(v->action.run());controls.add(b);return b;
     }
     private void row(LinearLayout parent,Button... buttons){
         LinearLayout r=new LinearLayout(this);
-        for(Button b:buttons){LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(0,dp(56),1);p.setMargins(dp(3),dp(4),dp(3),dp(4));r.addView(b,p);}
+        for(Button b:buttons){LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(0,dp(48),1);p.setMargins(dp(3),dp(4),dp(3),dp(4));r.addView(b,p);}
         parent.addView(r);
     }
     private Button key(String label,String code){Button b=button(label,()->submit("press",object("id",selected,"key",code)),code.equals("ok"));String description=switch(code){case "volup"->"Volume up";case "voldown"->"Volume down";case "chup"->"Channel up";case "chdown"->"Channel down";case "rev"->"Rewind";case "fwd"->"Fast forward";case "up"->"Up";case "down"->"Down";case "left"->"Left";case "right"->"Right";default->label;};b.setContentDescription(description);return b;}
@@ -65,43 +65,42 @@ public final class MainActivity extends Activity {
             else v.setPadding(i.getSystemWindowInsetLeft(),i.getSystemWindowInsetTop(),i.getSystemWindowInsetRight(),i.getSystemWindowInsetBottom());return i;
         });
         ScrollView scroll=new ScrollView(this);scroll.setFillViewport(true);root.addView(scroll);
-        LinearLayout content=column();content.setGravity(Gravity.CENTER_HORIZONTAL);content.setPadding(dp(12),dp(10),dp(12),dp(24));scroll.addView(content);
-        int width=Math.min(dp(364),getResources().getDisplayMetrics().widthPixels-dp(24));
+        LinearLayout content=column();content.setGravity(Gravity.CENTER_HORIZONTAL);content.setPadding(dp(16),dp(12),dp(16),dp(24));scroll.addView(content);
+        int width=Math.min(dp(364),getResources().getDisplayMetrics().widthPixels-dp(32));
         LinearLayout header=column();content.addView(header,new LinearLayout.LayoutParams(width,-2));
         LinearLayout heading=new LinearLayout(this);heading.setGravity(Gravity.CENTER_VERTICAL);header.addView(heading);
-        TextView title=text("PC TV Remote",20,Color.WHITE);title.setTypeface(null,Typeface.BOLD);heading.addView(title,new LinearLayout.LayoutParams(0,-2,1));
+        TextView title=text("PC TV Remote",20,INK);title.setTypeface(null,Typeface.BOLD);heading.addView(title,new LinearLayout.LayoutParams(0,-2,1));
         heading.addView(button("TVs",this::manageDialog,false),new LinearLayout.LayoutParams(dp(64),dp(48)));
         televisions=button("Find a TV",this::chooseTvDialog,false);televisions.setGravity(Gravity.CENTER_VERTICAL|Gravity.START);televisions.setPadding(dp(14),dp(8),dp(14),dp(8));televisions.setSingleLine(true);televisions.setEllipsize(android.text.TextUtils.TruncateAt.END);
         LinearLayout.LayoutParams selector=new LinearLayout.LayoutParams(-1,dp(52));selector.setMargins(0,dp(8),0,dp(4));header.addView(televisions,selector);
         progress=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);progress.setIndeterminate(true);progress.setVisibility(View.INVISIBLE);header.addView(progress,new LinearLayout.LayoutParams(-1,dp(3)));
-        status=text("Choose a TV to get started.",12,MUTED);status.setMinHeight(dp(40));status.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);header.addView(status);
-        LinearLayout remote=column();remote.setGravity(Gravity.CENTER_HORIZONTAL);remote.setPadding(dp(16),dp(16),dp(16),dp(18));
-        GradientDrawable shell=surface(CARD);shell.setCornerRadius(dp(38));shell.setStroke(dp(1),0xff42454c);remote.setBackground(shell);remote.setElevation(dp(6));
+        status=text("Choose a TV.",12,MUTED);status.setMinHeight(dp(36));status.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);header.addView(status);
+        LinearLayout remote=column();remote.setGravity(Gravity.CENTER_HORIZONTAL);remote.setPadding(dp(12),dp(12),dp(12),dp(12));
+        GradientDrawable shell=surface(CARD);shell.setCornerRadius(dp(16));remote.setBackground(shell);
         content.addView(remote,new LinearLayout.LayoutParams(width,-2));
         LinearLayout top=new LinearLayout(this);top.setGravity(Gravity.CENTER_VERTICAL);remote.addView(top,new LinearLayout.LayoutParams(-1,-2));
         Button power=key("","power");power.setForeground(getDrawable(R.drawable.ic_power));power.setForegroundGravity(Gravity.CENTER);power.setContentDescription("Power");top.addView(power,new LinearLayout.LayoutParams(dp(58),dp(52)));
-        TextView mark=text("IN3RT1A",12,MUTED);mark.setGravity(Gravity.CENTER);mark.setLetterSpacing(.18f);top.addView(mark,new LinearLayout.LayoutParams(0,-2,1));
+        top.addView(new View(this),new LinearLayout.LayoutParams(0,0,1));
         Button source=button("Input",this::inputAction,false);source.setContentDescription("Input");top.addView(source,new LinearLayout.LayoutParams(dp(64),dp(52)));
         row(remote,key("Back","back"),key("Home","home"),key("Menu","menu"));
-        FrameLayout pad=new FrameLayout(this);GradientDrawable ring=surface(0xff30333a);ring.setCornerRadius(dp(112));ring.setStroke(dp(1),0xff4d5058);pad.setBackground(ring);
+        FrameLayout pad=new FrameLayout(this);GradientDrawable ring=surface(LINE);ring.setCornerRadius(dp(112));pad.setBackground(ring);
         LinearLayout.LayoutParams padParams=new LinearLayout.LayoutParams(dp(224),dp(224));padParams.setMargins(0,dp(12),0,dp(12));remote.addView(pad,padParams);
         direction(pad,"▲","up",Gravity.TOP|Gravity.CENTER_HORIZONTAL,76,64);
         direction(pad,"▼","down",Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,76,64);
         direction(pad,"◀","left",Gravity.LEFT|Gravity.CENTER_VERTICAL,64,76);
         direction(pad,"▶","right",Gravity.RIGHT|Gravity.CENTER_VERTICAL,64,76);
-        Button ok=key("OK","ok");ok.setTextSize(22);ok.setTypeface(null,Typeface.BOLD);GradientDrawable center=surface(ORANGE);center.setCornerRadius(dp(40));
+        Button ok=key("OK","ok");ok.setTextSize(20);ok.setTypeface(null,Typeface.BOLD);GradientDrawable center=surface(ACCENT);center.setCornerRadius(dp(40));
         ok.setBackground(new android.graphics.drawable.RippleDrawable(android.content.res.ColorStateList.valueOf(0x55ffffff),center,null));pad.addView(ok,new FrameLayout.LayoutParams(dp(80),dp(80),Gravity.CENTER));
         LinearLayout rockers=new LinearLayout(this);rockers.setGravity(Gravity.CENTER_VERTICAL);remote.addView(rockers,new LinearLayout.LayoutParams(-1,-2));
-        rocker(rockers,"VOLUME","volup","voldown");
+        rocker(rockers,"Volume","volup","voldown");
         LinearLayout middle=column();middle.setGravity(Gravity.CENTER);LinearLayout.LayoutParams mid=new LinearLayout.LayoutParams(0,-2,1);mid.setMargins(dp(10),0,dp(10),0);rockers.addView(middle,mid);
-        middle.addView(key("Mute","mute"),new LinearLayout.LayoutParams(-1,dp(52)));TextView live=text("WI-FI\nREMOTE",10,MUTED);live.setGravity(Gravity.CENTER);middle.addView(live);
-        rocker(rockers,"CHANNEL","chup","chdown");
-        View divider=new View(this);divider.setBackgroundColor(0xff41434a);LinearLayout.LayoutParams line=new LinearLayout.LayoutParams(-1,dp(1));line.setMargins(dp(4),dp(15),dp(4),dp(10));remote.addView(divider,line);
+        middle.addView(key("Mute","mute"),new LinearLayout.LayoutParams(-1,dp(48)));
+        rocker(rockers,"Channel","chup","chdown");
+        View divider=new View(this);divider.setBackgroundColor(LINE);LinearLayout.LayoutParams line=new LinearLayout.LayoutParams(-1,dp(1));line.setMargins(dp(4),dp(12),dp(4),dp(8));remote.addView(divider,line);
         Button play=key("▶","play"),pause=key("II","pause");play.setContentDescription("Play");pause.setContentDescription("Pause");
         row(remote,key("≪","rev"),play,pause,key("≫","fwd"));
         Button typing=button("Text",this::textDialog,false);typing.setContentDescription("Type text on TV");
         row(remote,key("Replay","replay"),typing,button("More",this::moreDialog,false));
-        TextView footer=text("DIRECT TO TV · NO PC NEEDED",10,MUTED);footer.setGravity(Gravity.CENTER);footer.setPadding(0,dp(18),0,0);content.addView(footer);
         setContentView(root);root.requestApplyInsets();
     }
     private void direction(FrameLayout pad,String label,String code,int gravity,int width,int height){
@@ -110,9 +109,9 @@ public final class MainActivity extends Activity {
         pad.addView(b,new FrameLayout.LayoutParams(dp(width),dp(height),gravity));
     }
     private void rocker(LinearLayout parent,String label,String up,String down){
-        LinearLayout r=column();r.setGravity(Gravity.CENTER);r.setPadding(dp(4),dp(4),dp(4),dp(4));r.setBackground(surface(0xff15171b));parent.addView(r,new LinearLayout.LayoutParams(0,-2,1));
+        LinearLayout r=column();r.setGravity(Gravity.CENTER);r.setPadding(dp(4),dp(4),dp(4),dp(4));r.setBackground(surface(BG));parent.addView(r,new LinearLayout.LayoutParams(0,-2,1));
         Button plus=key("+",up),minus=key("−",down);plus.setTextSize(24);minus.setTextSize(24);
-        r.addView(plus,new LinearLayout.LayoutParams(-1,dp(48)));TextView caption=text(label,10,MUTED);caption.setGravity(Gravity.CENTER);r.addView(caption);r.addView(minus,new LinearLayout.LayoutParams(-1,dp(48)));
+        r.addView(plus,new LinearLayout.LayoutParams(-1,dp(48)));TextView caption=text(label,11,MUTED);caption.setGravity(Gravity.CENTER);r.addView(caption);r.addView(minus,new LinearLayout.LayoutParams(-1,dp(48)));
     }
     private void manageDialog(){
         int first=controls.size();LinearLayout panel=column();panel.setPadding(dp(18),dp(8),dp(18),dp(8));
