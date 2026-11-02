@@ -57,6 +57,10 @@ See [mobile release notes](https://github.com/clark719664/pc-tv-apps/releases/ta
 
 <img src="assets/screenshot-lite.png" alt="PC Cast Lite welcome screen" width="720">
 
+## What's new in 2026.11.01.1
+
+- **Queue hand-off on the TV:** the Roku channel shows *Playing next* with the next queued title ten seconds before a queued video ends, or *Nothing in queue* and returns to browsing after ten seconds. The old "That's all" card is gone.
+
 ## What's new in 2026.10.30.2
 
 - **Fixed:** opening a second PC Cast / PC TV app (they share ports 7373 and 7374) crashed it with a traceback dialog. It now says which app to close. The apps still run one at a time.
