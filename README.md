@@ -57,6 +57,11 @@ See [mobile release notes](https://github.com/clark719664/pc-tv-apps/releases/ta
 
 <img src="assets/screenshot-lite.png" alt="PC Cast Lite welcome screen" width="720">
 
+## What's new in 2026.11.06.1
+
+- YouTube casts in PC Cast Pro and PC Cast Lite now play in English. Dubbed videos could start in a random language; a video with no English track plays in its original language.
+- On a phone or in a short window, PC Cast Pro and PC TV Remote now scroll down to all of your TV's channels, and a swipe that starts on a button no longer presses it.
+
 ## What's new in 2026.11.02.1
 
 - Cleaner controls, simpler navigation and a shared neutral-and-blue design across the desktop apps, Roku channel, mobile apps and download page.
